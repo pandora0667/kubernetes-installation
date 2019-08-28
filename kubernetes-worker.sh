@@ -37,4 +37,6 @@ sudo swapoff -a
 sudo apt install kubeadm -y
 sudo kubeadm version
 
+echo
 echo "Please complete the installation by entering the kubernets join command. Thank you."
+echo
