@@ -23,6 +23,8 @@ sudo add-apt-repository \
 sudo apt update
 sudo apt-get install docker-ce docker-ce-cli containerd.io -y 
 sudo docker --version 
+sudo systemctl start docker
+sudo systemctl enable docker
 
 echo "docker installation complete\n" 
 ehco "Kubernetes installation start\n" 
@@ -31,7 +33,7 @@ curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add
 sudo apt-add-repository "deb http://apt.kubernetes.io/ kubernetes-xenial main"
 sudo swapoff -a
 sudo kubeadm version
-sudo kubeadm init --pod-network-cidr=172.168.10.0/24 > ~/join.txt 
+sudo kubeadm init --pod-network-cidr=172.168.10.0/24 > ~/join-command.txt 
 
 mkdir -p $HOME/.kube
 sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
@@ -48,4 +50,7 @@ sudo kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Do
 sudo  kubectl get nodes
 sudo  kubectl get pods --all-namespaces
 
-"Congratulations, the kubernets master installation is complete. Please check the following command and run the kubernetes-slave.sh file.\n" 
+echo "Congratulations, the kubernets master installation is complete. Please check the following command and run the kubernetes-slave.sh file.\n" 
+sleep 2
+
+cat ~/join-command.txt
