@@ -2,9 +2,10 @@
 
 echo "Hello Seongwon Kubernetes master installation shell script. for ubuntu 18.04 LTS Version" 
 echo "Kubernets master will be installed in 5 seconds. Press Ctrl + C to cancel."
-
 sleep 5 
+
 echo "---------- installation update and package ----------" 
+
 sudo cp /etc/apt/sources.list /etc/apt/sources.list.old && sudo sed -i 's/archive.ubuntu.com/ftp.daumkakao.com/g' /etc/apt/sources.list
 sudo dpkg-reconfigure tzdata
 sudo apt apt update && sudo apt upgrade -y 
@@ -27,6 +28,7 @@ sudo systemctl start docker
 sudo systemctl enable docker
 
 echo "---------- docker installation complete. ----------" 
+
 echo "---------- Kubernetes installation start. ----------" 
 
 curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add
@@ -47,7 +49,6 @@ sudo kubectl get nodes
 echo "---------- Pod Network from Master node and verify pod namespaces. ----------" 
 
 sudo kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
-
 sudo  kubectl get nodes
 sudo  kubectl get pods --all-namespaces
 
