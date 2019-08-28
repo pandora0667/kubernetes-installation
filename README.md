@@ -100,6 +100,49 @@ $ chmod +x kubernetes-worker.sh
 
 
 
+## Error 
+
+* 에러가 발생할 경우 다음과 같이 해결합니다. 
+
+  ```bash
+  $ sudo kubectl get no
+  
+  The connection to the server $(HOST-IP):6443 was refused - did you specify the right host or port?
+  ```
+
+  ```bash
+  $ sudo -i 
+  
+  $ sudo swapoff -a
+  
+  $ exit
+  
+  $ strace -eopenat kubectl version
+  openat(AT_FDCWD, "/etc/passwd", O_RDONLY|O_CLOEXEC) = 3
+  Client Version: version.Info{Major:"1", Minor:"15", GitVersion:"v1.15.3", GitCommit:"2d3c76f9091b6bec110a5e63777c332469e0cba2", GitTreeState:"clean", BuildDate:"2019-08-19T11:13:54Z", GoVersion:"go1.12.9", Compiler:"gc", Platform:"linux/amd64"}
+  
+  $ sudo systemctl status kubelet
+  Active: active (running) since Wed 2019-08-28 20:06:18 KST; 2min 11s ago
+  
+  $ kubectl get componentstatus
+  NAME                 STATUS    MESSAGE             ERROR
+  scheduler            Healthy   ok
+  controller-manager   Healthy   ok
+  etcd-0               Healthy   {"health":"true"}
+  
+  $ kubectl get no
+  NAME           STATUS   ROLES    AGE    VERSION
+  k8s-master     Ready    master   125m   v1.15.3
+  k8s-worker-1   Ready    <none>   52m    v1.15.3
+  k8s-worker-2   Ready    <none>   52m    v1.15.3
+  ```
+
+  
+
+  
+
+  
+
 ## Developer Profile
 
  **seongwon**
@@ -117,29 +160,4 @@ $ chmod +x kubernetes-worker.sh
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](https://git.wisoft.io/seongwon/kubernetes-installation/blob/master/LICENSE) file for details
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-The connection to the server 192.168.10.30:6443 was refused - did you specify the right host or port?
-
-1. sudo -i
-2. swapoff -a
-3. exit
-4. strace -eopenat kubectl version
-
-
-
-
 
