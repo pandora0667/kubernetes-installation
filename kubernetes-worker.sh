@@ -5,10 +5,12 @@ echo "Kubernets master will be installed in 5 seconds. Press Ctrl + C to cancel.
 sleep 5 
 
 echo "---------- installation update and package ----------" 
-
-sudo cp /etc/apt/sources.list /etc/apt/sources.list.old && sudo sed -i 's/archive.ubuntu.com/ftp.daumkakao.com/g' /etc/apt/sources.list
 sudo dpkg-reconfigure tzdata
-sudo apt apt update && sudo apt upgrade -y 
+sudo cp /etc/apt/sources.list /etc/apt/sources.list.old && sudo sed -i 's/archive.ubuntu.com/ftp.daumkakao.com/g' /etc/apt/sources.list
+sudo apt apt update
+sudo apt upgrade -y 
+sudo apt autoremove -y 
+
 sudo apt remove docker docker-engine docker.io containerd runc -y 
 sudo apt install git nmap htop glances wget curl apt-transport-https ca-certificates gnupg-agent software-properties-common -y 
 

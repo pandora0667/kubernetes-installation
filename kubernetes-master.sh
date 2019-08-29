@@ -6,9 +6,12 @@ sleep 5
 
 echo "---------- installation update and package ----------" 
 
-sudo cp /etc/apt/sources.list /etc/apt/sources.list.old && sudo sed -i 's/archive.ubuntu.com/ftp.daumkakao.com/g' /etc/apt/sources.list
 sudo dpkg-reconfigure tzdata
-sudo apt apt update && sudo apt upgrade -y 
+sudo cp /etc/apt/sources.list /etc/apt/sources.list.old && sudo sed -i 's/archive.ubuntu.com/ftp.daumkakao.com/g' /etc/apt/sources.list
+sudo apt apt update
+sudo apt upgrade -y 
+sudo apt autoremove -y 
+
 sudo apt remove docker docker-engine docker.io containerd runc -y 
 sudo apt install git nmap htop glances wget curl apt-transport-https ca-certificates gnupg-agent software-properties-common -y 
 
@@ -49,10 +52,12 @@ sudo kubectl get nodes
 echo "---------- Pod Network from Master node and verify pod namespaces. ----------" 
 
 sudo kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
-sudo  kubectl get nodes
+sudo  kubectl get no
 sudo  kubectl get pods --all-namespaces
 
+ehco 
 echo "Congratulations, the kubernets master installation is complete. Please check the following command and run the kubernetes-slave.sh file." 
+echo
 sleep 2
 
 cat ~/join-command.txt
