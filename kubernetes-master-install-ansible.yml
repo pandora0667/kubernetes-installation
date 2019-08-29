@@ -1,0 +1,87 @@
+---
+- name: Install Kubernetes master 
+  gather_facts: no 
+  hosts: all
+
+  tasks:
+  
+    - name: set timezone to set Asia/Seoul
+      timezone:
+        name: Asia/Seoul
+    
+    - name: Then add the GPG key for the official Docker repository to your system
+      apt_key: 
+        url: https://download.docker.com/linux/ubuntu/gpg
+
+    - name: Use the following command to set up the stable repository.
+      apt_repository:
+        repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable
+    
+    - name: Then add the GPG key for the official Kubernetes repository to your system
+      apt_key:
+        url: https://packages.cloud.google.com/apt/doc/apt-key.gpg 
+    
+    - name: Use the following command to set up the stable repository.
+      apt_repository:
+        repo: deb http://apt.kubernetes.io/ kubernetes-xenial main
+    
+    - name: swap memory off
+      shell: swapoff -a
+
+    - name: source.list korea repositories
+      shell: cp /etc/apt/sources.list /etc/apt/sources.list.old &&  sed -i 's/archive.ubuntu.com/ftp.daumkakao.com/g' /etc/apt/sources.list
+
+    - name: Update APT package manager repositories cache
+      apt:
+        update_cache: yes
+
+    - name: Upgrade installed packages
+      apt:
+        upgrade: dist
+
+    - name: Ubuntu Server necessary package install 
+      apt: 
+       name: "{{package}}"
+      vars:
+       package: 
+       - curl
+       - build-essential
+       - apt-transport-https
+       - vim
+       - nmap
+       - git
+       - nload
+       - htop
+       - speedtest-cli
+       - iotop
+       - iftop
+       - software-properties-common
+       - python3
+       - build-essential
+       - ca-certificates
+       - gnupg2
+       - wget
+       - pigz
+       - gzip
+       - cifs-utils
+       - docker-ce
+       - docker-ce-cli
+       - containerd.io 
+       - glances
+       - kubeadm
+    
+    - name: Kubernetes Version check
+      shell: kubeadm version
+
+    - name: kubeadm init
+      shell: kubeadm init --pod-network-cidr=172.168.10.0/24 > ~/join-command.txt
+    
+    - name: Kubernetes Setting
+      shell: mkdir -p $HOME/.kube && sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config && sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+    - name: Kubernetes network apply
+      shell: sudo kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+
+    - name: Ubuntu update and upgrade after autoremvoe
+      apt:
+         autoremove: yes
